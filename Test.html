@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>UF-Beställning – Dynamiskt pris</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+.container {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-width: 500px;
+  width: 100%;
+}
+h1, h2 {
+  color: #2c3e50;
+  text-align: center;
+}
+p { font-size: 14px; color: #333; }
+input[type="text"], input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover { background-color: #1e8449; }
+.swish-box {
+  background-color: #dff0d8;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #a6d8a8;
+  text-align: center;
+}
+.note {
+  font-size: 13px;
+  color: #e74c3c;
+  margin-top: 10px;
+  text-align: center;
+}
+.note img {
+  max-width: 200px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Beställ produkt</h1>
+
+  <!-- Steg 1: Adress -->
+  <div id="step-address">
+    <h2>Steg 1: Ange din adress</h2>
+    <input type="text" id="street" placeholder="Gatuadress" required>
+    <input type="text" id="postcode" placeholder="Postnummer" required>
+    <button onclick="checkAddress()">Nästa</button>
+  </div>
+
+  <!-- Steg 2: Betalning -->
+  <div id="step-payment" class="hidden">
+    <h2>Steg 2: Swisha betalning</h2>
+    <div class="swish-box">
+      <p id="price-text"></p>
+      <p>Swish-nummer: <strong>123 029 24 09</strong></p>
+      <p><strong>VIKTIGT:</strong> Swisha först innan du fyller i formuläret nedan!</p>
+      <p>Ange sedan referens-ID i formuläret så vi kan matcha betalningen.</p>
+    </div>
+
+    <form action="mailto:er-mailadress@exempel.com" method="POST" enctype="text/plain">
+      <input type="text" name="name" placeholder="Ditt namn" required>
+      <input type="tel" name="phone" placeholder="Telefonnummer" required>
+      <input type="text" name="address" placeholder="Adress" required>
+      <input type="text" name="reference_id" placeholder="Referens-ID från Swish" required>
+      <button type="submit">Skicka beställning</button>
+    </form>
+
+    <div class="note">
+      <p>OBS: Swisha till vårt nummer <strong>123 029 24 09</strong> och skriv referens-ID i formuläret så vi kan matcha betalningen.</p>
+      <img src="Namnlös.jpeg" alt="Referens-ID i form av telefonnummer">
+    </div>
+  </div>
+</div>
+
+<script>
+// Lista över postnummer i Västerås
+const vasterasPostcodes = [
+  "72001","72002","72003","72007","72010","72011","72012","72013",
+  "72100","72101","72103","72104","72105","72106","72107","72108","72109",
+  "72119","72120","72122","72123","72126","72127","72128","72129",
+  "72130","72131","72132","72133","72134","72135","72136","72137","72138",
+  "72150","72151","72153","72157","72159","72161","72162","72163","72164",
+  "72165","72166","72167","72168","72169","72170","72171","72173","72174",
+  "72175","72176","72178","72201","72210","72211","72212","72213","72214",
+  "72215","72216","72217","72218","72219","72220","72221","72222","72223",
+  "72224","72225","72226","72227","72228","72231","72233","72240","72241",
+  "72242","72243","72244","72245","72246","72301","72334","72335","72336",
+  "72337","72338","72339","72340","72341","72342","72343","72344","72345",
+  "72346","72347","72348","72349","72350","72351","72352","72353","72355",
+  "72356","72357","72358","72359","72401","72402","72455","72460","72461",
+  "72462","72463","72464","72465","72466","72467","72468","72469","72470",
+  "72471","72472","72473","72474","72475","72476","72477","72478","72479",
+  "72480","72481","72482","72483","72487"
+];
+
+function checkAddress() {
+  const postcode = document.getElementById("postcode").value.trim();
+  let price = 2; // standardpris
+  if (vasterasPostcodes.includes(postcode)) {
+    price = 1;
+  }
+  document.getElementById("price-text").innerHTML = `<strong>Pris: ${price} kr</strong>`;
+  document.getElementById("step-address").classList.add("hidden");
+  document.getElementById("step-payment").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
